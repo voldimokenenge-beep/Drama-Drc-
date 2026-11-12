@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Drama Drc</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#16060f;--chip:#2a2125;--ink:#fff;--muted:#a99ba3;--line:#3a2a33;--accent:#ff4d8d;--hot:#f08a3c;--green:#19b77b;color-scheme:dark;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 Figtree,system-ui,sans-serif}
+main{max-width:640px;margin:0 auto;padding:14px 14px calc(90px + env(safe-area-inset-bottom,0px))}
+h1,h2,h3,.pz b{font-family:"Bricolage Grotesque",Figtree,sans-serif}
+h1{font-size:2.2rem;line-height:1;letter-spacing:-.02em;margin:6px 0 12px}
+h2{font-size:1.3rem;margin:26px 0 10px}
+h3{margin:0}
+.meta{color:var(--muted);font-size:14px;margin:2px 0 8px}
+button{font-family:inherit}
+:is(input,textarea,button):focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.search{display:flex;align-items:center;gap:10px;background:var(--chip);border-radius:999px;padding:0 16px}
+.search input{flex:1;min-width:0;background:none;border:0;color:var(--ink);font:inherit;padding:13px 0}
+.search input:focus-visible{outline:none}
+.search:focus-within{outline:3px solid var(--accent)}
+.tabs{display:flex;gap:22px;overflow-x:auto;padding:14px 2px 10px;scrollbar-width:none}
+.tab{flex:none;background:none;border:0;color:var(--muted);font:600 1.3rem "Bricolage Grotesque",sans-serif;padding:0;cursor:pointer}
+.tab[aria-selected=true]{color:var(--accent);font-weight:800}
+.row{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;scrollbar-width:none}
+.chip{flex:none;border:0;background:var(--chip);color:var(--ink);padding:8px 15px;border-radius:999px;font:600 14px Figtree,sans-serif;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--accent)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 10px}
+.it{display:block;background:none;border:0;padding:0;color:inherit;text-align:left;cursor:pointer;min-width:0}
+.pz{display:flex;align-items:flex-end;justify-content:center;position:relative;aspect-ratio:2/3;border-radius:10px;overflow:hidden;padding:8px 6px 26px;text-align:center}
+.pz b{font-size:1rem;line-height:1.05;text-shadow:0 2px 8px rgba(0,0,0,.6);position:relative}
+.pz::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.25),transparent 55%)}
+.bd{position:absolute;top:0;left:0;padding:2px 9px;border-radius:10px 0 10px 0;font-size:12.5px;font-weight:600;background:var(--accent);z-index:1}
+.bd.nw{background:var(--green)}
+.vw{position:absolute;right:6px;bottom:5px;font-size:12.5px;font-weight:600;z-index:1}
+.nm{display:block;margin-top:6px;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tg{display:inline-block;max-width:100%;margin-top:4px;background:var(--chip);color:var(--muted);font-size:12.5px;font-weight:600;padding:3px 9px;border-radius:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tg.hot{color:var(--hot)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.big-btn{background:var(--chip);border:0;border-radius:10px;color:var(--muted);padding:14px;font:600 1.1rem Figtree,sans-serif;cursor:pointer}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1.5px solid var(--accent);background:transparent;color:var(--accent);padding:8px 14px;border-radius:10px;font:600 14px Figtree,sans-serif;cursor:pointer}
+.btn[aria-pressed=true],.btn.solid{background:var(--accent);color:#fff}
+.empty{text-align:center;color:var(--muted);padding:30px 12px;grid-column:1/-1}
+.back{background:none;border:0;color:var(--accent);font:600 15px Figtree,sans-serif;padding:4px 0;cursor:pointer}
+.head{display:flex;gap:16px;margin:12px 0 16px}
+.head .pz{flex:none;width:110px;aspect-ratio:2/3}
+.stars button{background:none;border:0;font-size:28px;color:var(--line);cursor:pointer;padding:0 2px}
+.stars button.on{color:#f0a500}
+input.f,textarea{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--chip);color:var(--ink);font:inherit}
+.eps{display:grid;gap:8px;margin:10px 0 22px}
+.ep-btn{display:flex;justify-content:space-between;background:var(--chip);border:0;border-radius:12px;padding:12px 14px;color:var(--ink);font:600 15px Figtree,sans-serif;cursor:pointer}
+.rev{border-top:1px solid var(--line);padding:12px 0}
+.nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:#0e0409;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:35}
+.nav button{flex:1;display:grid;justify-items:center;gap:2px;background:none;border:0;padding:8px 2px 10px;color:var(--muted);font:600 11.5px Figtree,sans-serif;cursor:pointer}
+.nav i{font-style:normal;font-size:22px;line-height:1}
+.nav button[aria-current=page]{color:var(--accent)}
+.player{position:fixed;inset:0;z-index:30;overflow-y:auto;scroll-snap-type:y mandatory;background:#000}
+.player.pv{bottom:calc(58px + env(safe-area-inset-bottom,0px))}
+.pep{height:100%;scroll-snap-align:start;scroll-snap-stop:always;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:24px 20px 28px;color:#fff}
+.soon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 40px;opacity:.85}
+.pep h3{font-size:1.5rem;position:relative}
+.pep p{position:relative;margin:4px 0 0;max-width:72%}
+.side{position:absolute;right:14px;bottom:28px;display:grid;gap:14px}
+.side button{width:52px;height:52px;border-radius:50%;border:0;background:rgba(255,255,255,.2);color:#fff;font-size:20px;cursor:pointer}
+.side button.on{background:#fff;color:#c2255c}
+.close{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:14px;z-index:40;border:0;border-radius:999px;background:rgba(0,0,0,.5);color:#fff;padding:9px 16px;font:600 14px Figtree,sans-serif;cursor:pointer}
+.off{background:var(--hot);color:#1a0a00;text-align:center;font:600 14px Figtree,sans-serif;padding:8px 12px}
+.rot{left:auto;right:14px}
+.ep-row{display:flex;gap:8px}.ep-row .ep-btn{flex:1}
+.dl{flex:none;width:48px;border:0;border-radius:12px;background:var(--chip);color:var(--ink);font-size:18px;cursor:pointer}.dl.ok{background:var(--green)}.dl:disabled{opacity:.6}
+.fake .player{inset:auto;top:0;left:100%;width:100dvh;height:100dvw;transform-origin:0 0;transform:rotate(90deg);overflow:hidden;scroll-snap-type:none}
+body{background:radial-gradient(ellipse at 85% -5%,#4d0f3d,transparent 50%),var(--bg)}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.logo{flex:1;display:flex;align-items:center;gap:8px}
+.lg{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--accent);font-size:20px}
+.logo b{font:800 1.8rem/1 "Bricolage Grotesque",sans-serif;display:block}.logo i{font-style:normal;color:var(--accent)}
+.logo small{color:var(--muted);font-size:12px}
+.ic{position:relative;width:46px;height:46px;border-radius:50%;border:0;background:var(--chip);color:#fff;font-size:20px;cursor:pointer}
+.ic sup{position:absolute;top:-2px;right:-2px;background:#e5254f;border-radius:999px;font-size:11px;padding:1px 6px}
+.av{background:#5b5bd6;font:800 1.2rem "Bricolage Grotesque",sans-serif}
+.search{border:1.5px solid var(--accent)}
+.mic{background:none;border:0;font-size:20px;cursor:pointer}
+.tiles{display:flex;gap:10px;overflow-x:auto;padding:14px 0 4px;scrollbar-width:none}
+.tiles button{flex:none;display:grid;justify-items:center;gap:4px;min-width:74px;background:var(--chip);border:1.5px solid transparent;border-radius:14px;color:#fff;padding:10px 8px;font:600 13px Figtree,sans-serif;cursor:pointer}
+.tiles i{font-style:normal;font-size:24px}.tiles .cur{border-color:var(--accent);box-shadow:0 0 14px rgba(255,77,141,.5)}
+.chip.nx{padding:8px 13px}
+.sh{display:flex;align-items:center;justify-content:space-between;margin:22px 0 10px}.sh h2{margin:0;border-left:4px solid var(--accent);padding-left:10px}
+.va{background:none;border:0;color:var(--accent);font:600 15px Figtree,sans-serif;cursor:pointer}
+.vw em{font-style:normal;background:rgba(255,255,255,.25);border-radius:4px;padding:0 5px;margin-left:2px}
+.vip{display:flex;align-items:center;gap:12px;width:100%;margin-top:22px;padding:14px;border:1px solid #7a2a8a;border-radius:16px;background:linear-gradient(90deg,#2a0b3a,#4a1250);color:#fff;text-align:left;font:inherit;cursor:pointer}
+.vip span:nth-child(2){flex:1}.vip b{display:block;color:#ffc933}.vip small{display:block;font-size:13px}
+.vip em{font-style:normal;font-weight:800;background:#ffc933;color:#2a1500;border-radius:999px;padding:8px 14px;white-space:nowrap}
+.crown{font-size:30px}
+.sc{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:10px;margin-top:14px}
+.sc button{display:grid;justify-items:center;gap:4px;background:var(--chip);border:1px solid var(--line);border-radius:14px;color:#fff;padding:12px 6px;font:600 13px Figtree,sans-serif;cursor:pointer}.sc i{font-style:normal;font-size:22px}
+.perks{line-height:2}
+.srow{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.sw{width:52px;height:30px;border-radius:999px;border:0;background:var(--line);padding:3px;cursor:pointer;text-align:left}.sw u{display:block;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .15s}.sw[aria-checked=true]{background:var(--accent)}.sw[aria-checked=true] u{transform:translateX(22px)}
+.nav .qp{padding-top:0}.qp span{display:grid;place-items:center;width:62px;height:62px;border-radius:50%;background:var(--accent);margin-top:-26px;box-shadow:0 0 20px var(--accent);color:#fff}
+details{background:var(--chip);border-radius:12px;padding:12px 14px;margin-bottom:8px}summary{font-weight:600;cursor:pointer}
+.bn{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:18px;scrollbar-width:none;margin-top:6px}
+.bn::-webkit-scrollbar{display:none}
+.bs{flex:none;width:100%;scroll-snap-align:center;padding:22px 18px 20px;min-height:200px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;position:relative}
+.bs::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.6),transparent 70%)}
+.bs>*{position:relative}
+.bk{align-self:flex-start;background:var(--accent);border-radius:8px;padding:2px 10px;font-size:13px;font-weight:600}
+.bs h3{font-size:1.7rem;line-height:1.05}
+.bs p{margin:0;font-size:14.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dots{display:flex;justify-content:center;gap:6px;margin:10px 0 0}.dots span{width:7px;height:7px;border-radius:50%;background:var(--line)}.dots span.on{background:var(--accent);width:20px;border-radius:4px}
+.pr{position:absolute;top:0;right:0;background:#ffc933;color:#2a1500;font-size:12px;font-weight:800;padding:2px 8px;border-radius:0 10px 0 10px;z-index:1}
+.cf label{display:block;margin:12px 0 4px;color:var(--muted);font-size:14px}
+select.f{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--chip);color:var(--ink);font:inherit}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stats div{background:var(--chip);border-radius:14px;padding:12px 6px;text-align:center;color:var(--muted);font-size:13px}.stats b{display:block;font:800 1.8rem "Bricolage Grotesque",sans-serif;color:var(--ink)}
+.crow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.pp{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.pp .f{width:84px;padding:8px}
+.pill{display:inline-block;background:#0e3a2a;color:#3ddc97;border-radius:999px;padding:4px 12px;font-size:13px;font-weight:600}
+.ch{display:flex;justify-content:space-between;align-items:center;margin:6px 0 14px}
+.cb{font:800 2.6rem/1 "Bricolage Grotesque",sans-serif;color:var(--accent);margin:0}
+.shield{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:#3a1230;font-size:28px}
+.wc{background:#1d1226;border-radius:18px;padding:18px;margin:6px 0 18px;color:var(--muted)}.wc small{display:block}.wc b{display:block;font:800 1.5rem "Bricolage Grotesque",sans-serif;color:#fff;margin:4px 0}
+.at{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px}
+.at button{display:grid;justify-items:center;gap:6px;background:#1a1222;border:1.5px solid #3a2a4a;border-radius:16px;color:#fff;padding:16px 6px;font:600 15px Figtree,sans-serif;text-align:center;cursor:pointer}.at i{font-style:normal;font-size:24px}
+.at .on{background:#a3175f;border-color:#ff4d8d}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:12px}.sg div{background:#1d1226;border-radius:16px;padding:16px;color:var(--muted)}.sg b{display:block;font:800 2.4rem "Bricolage Grotesque",sans-serif;color:#fff;margin:4px 0}
+.qa{display:block;width:100%;background:#fff;color:#16060f;border:0;border-radius:999px;padding:14px;margin-top:10px;font:600 16px Figtree,sans-serif;cursor:pointer}
+.step{display:flex;gap:8px;align-items:center}.step span{min-width:30px;text-align:center;font-weight:600}
+</style>
+</head>
+<body>
+<div class="off" id="off" role="status" hidden>Hors connexion : tu vois seulement ce que tu as téléchargé.</div>
+<main id="app"></main>
+<nav class="nav" id="nav"><button data-go="home"><i>⌂</i>Accueil</button><button data-go="films"><i>▦</i>Films et séries</button><button class="qp" data-go="pourvous"><span><i>▶</i></span>Lecture rapide</button><button data-go="invitation"><i>✉</i>Invitation</button><button data-go="profil"><i>☺</i>Profil</button></nav>
+<div id="pl" hidden></div>
+<script>
+const D=[
+{t:"Le Contrat du Milliardaire",e:30,g:"Romance",c:["#7a1f5c","#1c0a2e"],v:318300,tr:1,tag:"Romance douce No.1",hot:1,s:"Une serveuse signe un faux mariage avec un milliardaire pour sauver sa famille. Le contrat cache plus qu’il n’en dit."},
+{t:"Retour de la Reine",e:36,g:"Vengeance",c:["#12385c","#0a1020"],v:965600,tr:1,tag:"Vengeance No.1",hot:1,s:"Trahie et chassée de son royaume d’affaires, une femme revient sous une nouvelle identité pour tout reprendre."},
+{t:"Louve de Minuit",e:28,g:"Aventure",c:["#3d2a6e","#0d0818"],v:171000,n:1,tag:"Sang bestial No.2",s:"Chaque nuit de pleine lune, une étudiante découvre qu’elle est liée à un clan que tout le monde croyait disparu."},
+{t:"Belle-mère en Secret",e:32,g:"Action",c:["#7b2d1f","#1a0a08"],v:131500,tag:"Famille",s:"Une belle-mère douce en apparence cache un passé de championne d’arts martiaux, et un compte à régler."},
+{t:"Mariage Express",e:24,g:"Comédie",c:["#c2255c","#3a0a22"],v:85600,n:1,tag:"Crise mariage No.3",hot:1,s:"Quarante-huit heures pour trouver un mari. Elle choisit le premier inconnu venu, qui s’avère être son nouveau patron."},
+{t:"L’Héritière Cachée",e:40,g:"Drame",c:["#1f6f78","#081a1e"],v:27200,tag:"Héritage",s:"Élevée dans un petit village, une jeune femme apprend qu’elle est l’unique héritière d’une dynastie puissante."},
+{t:"Mon Voisin le Dragon",e:20,g:"Fantasy",c:["#e8890c","#3a1a05"],v:22900,n:1,tag:"Fantasy comédie",s:"Un nouveau voisin très poli, très distingué… et qui crache du feu quand il éternue."},
+{t:"Trahie par mon Frère",e:26,g:"Drame",c:["#5b6770","#12161a"],v:54300,tr:1,tag:"Trahison",s:"Le jour de son mariage, elle découvre que son propre frère a vendu l’entreprise familiale."},
+{t:"La Dernière Danse",e:22,g:"Romance",c:["#a3306a","#1c0714"],v:18400,n:1,tag:"Amour interdit",s:"Une danseuse blessée et son ancien rival se retrouvent pour un ultime spectacle."},
+{t:"Le Pacte des Héritiers",e:34,g:"Drame",c:["#4c3a8c","#0c0a1e"],v:88100,tag:"Pouvoir No.4",hot:1,s:"Cinq héritiers jurent de ne jamais se trahir. Un seul tiendra parole."},
+{t:"Quartier des Pardons",e:18,g:"Drame",c:["#2f9e6e","#08201a"],v:12700,n:1,tag:"Seconde chance",s:"Un homme sorti de prison rouvre la boulangerie de son quartier et affronte ceux qui l’ont oublié."},
+{t:"Le Secret de la Mariée",e:30,g:"Romance",c:["#8a5a2b","#1e1008"],v:203000,tr:1,tag:"Mystère",s:"La veille de ses noces, une mariée reçoit une lettre qui change tout ce qu’elle croyait savoir."}
+];
+{const c=crLoad();D.push(...c.added);D.forEach(d=>{if(c.over[d.t]!==undefined)d.p=c.over[d.t];if(c.eps&&c.eps[d.t])d.e=c.eps[d.t]})}
+const GENRES=["Tout","Romance","Action","Aventure","Vengeance","Fantasy","Drame","Comédie"];
+let st={q:"",tab:"pv",more:6,gf:"Tout",ord:D.map((_,i)=>i),mine:{},rev:{},likes:{},dl:{},name:"Invité"},draft=0;
+try{const r=JSON.parse(localStorage.getItem("drc-v3")||"null");if(r)Object.assign(st,{mine:r.mine||{},rev:r.rev||{},likes:r.likes||{},dl:r.dl||{},name:r.name||"Invité"})}catch(e){}
+function save(){try{localStorage.setItem("drc-v3",JSON.stringify({mine:st.mine,rev:st.rev,likes:st.likes,dl:st.dl,name:st.name}))}catch(e){}}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=v=>v<1000?String(v):(v/1000).toFixed(1).replace(".",",")+"K";
+const bg=d=>`background:linear-gradient(165deg,${d.c[0]},${d.c[1]})`;
+const cnt=k=>Object.values(st.mine).filter(v=>v===k).length;
+const nrev=()=>Object.values(st.rev).reduce((a,l)=>a+l.length,0);
+function avg(t){const l=st.rev[t]||[];return l.length?(l.reduce((a,r)=>a+r.r,0)/l.length).toFixed(1).replace(".",","):null}
+const stars=n=>"★".repeat(n)+"☆".repeat(5-n);
+const go=h=>{location.hash=h};
+const online=()=>navigator.onLine!==false;
+const dlN=i=>Object.keys(st.dl).filter(k=>k.startsWith(D[i].t+"-")).length;
+function card(i){const d=D[i];return `<button class="it" data-open="${i}"><span class="pz" style="${bg(d)}">${d.n?'<span class="bd nw">Nouveautés</span>':d.tr?'<span class="bd">Tendance</span>':""}<b>${d.t}</b>${d.p>0?`<span class="pr">👑 ${price(d.p)}</span>`:""}<span class="vw">👁 ${fmt(d.v)} <em>HD</em></span></span><span class="nm">${d.t}</span><span class="tg${d.hot?" hot":""}">${d.tag}</span></button>`}
+const grid=L=>`<div class="grid">${L.length?L.map(card).join(""):`<p class="empty">${online()?"Aucune série trouvée. Essaie un autre mot.":"Hors connexion : tu n’as rien téléchargé pour l’instant."}</p>`}</div>`;
+const mark=d=>{const m=st.mine[d.t];return `<button class="btn" aria-pressed="${m==="want"}" data-t="${d.t}" data-k="want">À regarder</button><button class="btn" aria-pressed="${m==="seen"}" data-t="${d.t}" data-k="seen">Vu</button>`};
+
+function home(){
+ $("app").innerHTML=`<label class="search"><span aria-hidden="true">⌕</span><input id="q" type="search" placeholder="Rechercher une série" aria-label="Rechercher une série" value="${esc(st.q)}"></label><div class="tabs" id="tabs" role="tablist"></div><div id="main"></div>`;
+ $("q").addEventListener("input",e=>{st.q=e.target.value;drawHome()});drawHome();
+}
+function drawHome(){
+ $("tabs").innerHTML=[["pv","Pour vous"],["cl","Classement"],["nv","Nouveautés"]].map(([k,l])=>`<button class="tab" role="tab" aria-selected="${st.tab===k}" data-tab="${k}">${l}</button>`).join("");
+ let L=st.ord.slice();if(st.tab==="cl")L.sort((a,b)=>D[b].v-D[a].v);if(st.tab==="nv")L=L.filter(i=>D[i].n);
+ if(!online())L=L.filter(i=>dlN(i));const q=st.q.trim().toLowerCase();if(q)L=L.filter(i=>D[i].t.toLowerCase().includes(q));
+ const N=D.map((d,i)=>i).filter(i=>D[i].n&&(online()||dlN(i)));
+ $("main").innerHTML=grid(L.slice(0,st.more))+(q?"":`<div class="two"><button class="big-btn" data-more>Plus de contenu</button><button class="big-btn" data-shuffle>Changer</button></div><h2>Nouveautés à découvrir</h2>${grid(N)}`);
+}
+function films(){
+ $("app").innerHTML=`<h1>Films et séries</h1><div class="row" role="group" aria-label="Genres">${GENRES.map(g=>`<button class="chip" aria-pressed="${st.gf===g}" data-gf="${g}">${g}</button>`).join("")}</div>${grid(D.map((d,i)=>i).filter(i=>(st.gf==="Tout"||D[i].g===st.gf)&&(online()||dlN(i))))}`;
+}
+function serie(i){
+ const d=D[i];if(!d)return go("home");draft=0;
+ const l=st.rev[d.t]||[],a=avg(d.t);
+ $("app").innerHTML=`<button class="back" data-go="home">← Retour</button>
+ <div class="head"><span class="pz" style="${bg(d)}"><b>${d.t}</b></span><div><h1 style="font-size:1.7rem">${d.t}</h1><p class="meta">${d.e} épisodes, ${d.g}<br>▷ ${fmt(d.v)} vues<br>${dlN(i)} sur ${d.e} téléchargés${d.p>0?`<br>Premium : ${price(d.p)}, 3 premiers épisodes gratuits`:""}</p><p class="meta">${a?"★ "+a+" ("+l.length+" avis)":"Pas encore d’avis"}</p></div></div>
+ <p>${d.s}</p><div class="btns"><button class="btn solid" data-go="lecteur-${i}-1">Regarder l’épisode 1</button>${mark(d)}<button class="btn" data-dlall="${i}">${dlN(i)<d.e?"Tout télécharger":"Tout supprimer"}</button></div>
+ <h2>Épisodes</h2><div class="eps">${Array.from({length:d.e},(_,n)=>`<div class="ep-row"><button class="ep-btn" data-go="lecteur-${i}-${n+1}"><span>Épisode ${n+1}</span><span aria-hidden="true">${d.p>0&&n+1>3?"🔒":"▶"}</span></button><button class="dl${st.dl[d.t+"-"+(n+1)]?" ok":""}" data-dl="${i}-${n+1}" aria-label="${st.dl[d.t+"-"+(n+1)]?"Supprimer le téléchargement de":"Télécharger"} l’épisode ${n+1}">${st.dl[d.t+"-"+(n+1)]?"✓":"⬇"}</button></div>`).join("")}</div>
+ <h2 style="margin-top:0">Donne ton avis</h2><div class="stars" id="stars" role="group" aria-label="Note">${[1,2,3,4,5].map(n=>`<button data-star="${n}" aria-label="${n} sur 5">★</button>`).join("")}</div>
+ <textarea id="rtxt" rows="3" maxlength="400" placeholder="Qu’as-tu pensé de cette série ?" aria-label="Ton avis"></textarea>
+ <div class="btns" style="margin-top:10px"><button class="btn solid" data-pub="${i}">Publier l’avis</button></div><p class="meta" id="rmsg"></p>
+ <h2>Avis</h2>${l.length?l.slice().reverse().map(r=>`<div class="rev"><strong>${esc(r.n)}</strong> <span style="color:#f0a500">${stars(r.r)}</span><br>${esc(r.x)}</div>`).join(""):'<p class="meta">Sois le premier à donner ton avis.</p>'}`;
+}
+function profil(){
+ const idx=k=>D.map((d,i)=>i).filter(i=>st.mine[D[i].t]===k);
+ const sec=(t,k)=>idx(k).length?`<h2>${t}</h2>${grid(idx(k))}`:"";
+ $("app").innerHTML=`<h1>Mon profil</h1><div class="head"><span class="pz" style="background:var(--accent);border-radius:50%;width:90px;aspect-ratio:1;padding:0;align-items:center"><b style="font-size:2.4rem">${esc((st.name[0]||"?").toUpperCase())}</b></span><div><h3>${esc(st.name)}</h3><p class="meta">${cnt("want")} à regarder<br>${cnt("seen")} vues<br>${nrev()} avis</p></div></div>
+ <label for="nm" class="meta">Ton nom</label><input class="f" id="nm" maxlength="24" value="${esc(st.name)}"><div class="btns" style="margin-top:10px"><button class="btn solid" data-savename>Enregistrer le nom</button></div>
+ <h2>Mon espace</h2>${shortcuts()}${sec("Déjà vues","seen")}
+ <p class="meta" style="margin-top:24px">Ton profil, ta liste et tes avis sont gardés sur cet appareil. De vrais comptes, avec des avis partagés, demanderont un serveur.</p>`;
+}
+function invitation(){
+ $("app").innerHTML=`<h1>Invite tes amis</h1><p>Partage Drama Drc avec tes proches pour regarder et noter des séries ensemble.</p><div class="btns"><button class="btn solid" data-share>Inviter un ami</button></div><p class="meta" id="imsg" aria-live="polite"></p>`;
+}
+function player(items,start,back,pv){
+ const caps=["Tout commence ici.","Rien ne sera plus comme avant.","Un secret éclate.","Elle n’aurait jamais dû savoir.","Le piège se referme."];
+ $("pl").hidden=false;
+ $("pl").innerHTML=(back?`<button class="close" data-go="${back}">← Retour</button><button class="close rot" data-rot>↔ Horizontal</button>`:"")+`<div class="player${pv?" pv":""}" id="ps">${items.map(({i,ep})=>{const d=D[i],k=d.t+"-"+ep,lk=st.likes[k];
+ return `<section class="pep" style="${bg(d)}"><div class="soon">${d.p>0&&ep>3?"Épisode premium verrouillé. Débloque la série pour "+price(d.p)+" (paiement bientôt disponible).":!online()&&!st.dl[k]?"Cet épisode n’est pas téléchargé. Reconnecte-toi pour le regarder.":"Vidéo à venir : l’épisode s’affichera ici."}</div><h3>${d.t}</h3><p>Épisode ${ep} sur ${d.e}. ${caps[ep%caps.length]}</p><div class="side"><button class="${lk?"on":""}" data-like="${k}" aria-label="J’aime" aria-pressed="${!!lk}">♥</button><button data-go="serie-${i}" aria-label="Voir la série">ⓘ</button><button class="${st.dl[k]?"on":""}" data-dl="${i}-${ep}" aria-label="Télécharger l’épisode">⬇</button><button data-nextep aria-label="Suivant">↓</button></div></section>`}).join("")}</div>`;
+ const s=$("ps");s.scrollTop=start*s.clientHeight;
+}
+async function rot(b){const p=$("pl"),on=!p.classList.contains("land");let real=false;
+ try{if(on){await document.documentElement.requestFullscreen();await screen.orientation.lock("landscape")}else{screen.orientation.unlock();if(document.fullscreenElement)await document.exitFullscreen()}real=true}catch(e){}
+ p.classList.toggle("land",on);p.classList.toggle("fake",on&&!real);b.textContent=on?"↕ Vertical":"↔ Horizontal"}
+function refresh(){if(!/^#(lecteur|pourvous)/.test(location.hash))return render();document.querySelectorAll("[data-dl]").forEach(x=>{const[i,e]=x.dataset.dl.split("-").map(Number);x.classList.toggle("on",!!st.dl[D[i].t+"-"+e]);x.disabled=false;x.textContent="⬇"})}
+const PILLS=[["Tout","⭐ Pour vous"],["Action","⚔ Action"],["Romance","💗 Romance"],["Aventure","⛰ Aventure"],["Comédie","😀 Comédie"],["Fantasy","✨ Fantasy"],["Drame","🎭 Drame"],["Vengeance","🔥 Vengeance"]];
+const vis=i=>online()||dlN(i);
+const ALL=()=>D.map((d,i)=>i).filter(vis);
+const nb=()=>{try{return localStorage.getItem("drc-read")?0:3}catch(e){return 3}};
+const hist=()=>{try{return JSON.parse(localStorage.getItem("drc-hist")||"[]")}catch(e){return[]}};
+const addHist=i=>{try{localStorage.setItem("drc-hist",JSON.stringify([i,...hist().filter(x=>x!==i)].slice(0,20)))}catch(e){}};
+const DV={notif:true,wifi:false};
+function getSet(k){let s={};try{s=JSON.parse(localStorage.getItem("drc-set")||"{}")}catch(e){}return k===undefined?s:(k in s?s[k]:DV[k])}
+const sech=(t,h)=>`<div class="sh"><h2>${t}</h2><button class="va" data-go="${h}">Voir tout →</button></div>`;
+function shortcuts(){return `<div class="sc">${[["telechargements","⬇","Mes téléchargements"],["historique","🕘","Historique"],["maliste","➕","Ma liste"],["parametres","⚙","Paramètres"],["aide","🎧","Aide & Support"]].map(([r,i,l])=>`<button data-go="${r}"><i>${i}</i>${l}</button>`).join("")}</div>`}
+function home(){
+ $("app").innerHTML=`<div class="top"><div class="logo" data-logo><span class="lg">▶</span><div><b>Drama<i>DRC</i></b><small>Regardez • Rêvez • Vibrez</small></div></div><button class="ic" data-go="notifications" aria-label="Notifications">🔔${nb()?`<sup>${nb()}</sup>`:""}</button><button class="ic av" data-go="profil" aria-label="Mon profil">${esc((st.name[0]||"?").toUpperCase())}</button></div>
+ <label class="search"><span aria-hidden="true">⌕</span><input id="q" type="search" placeholder="Rechercher un film, une série…" aria-label="Rechercher" value="${esc(st.q)}"><button type="button" class="mic" data-mic aria-label="Recherche vocale">🎤</button></label>
+ <div class="tiles">${[["home","🏠","Accueil"],["films","🎞","Séries"],["cinema","🎬","Films"],["tendances","🔥","Tendances"],["premium","👑","Premium"],["plus","▦","Plus ▾"]].map(([r,i,l],n)=>`<button data-go="${r}"${n?"":' class="cur"'}><i>${i}</i>${l}</button>`).join("")}</div>
+ <div class="row" id="pills" role="group" aria-label="Genres">${PILLS.map(([g,l])=>`<button class="chip" aria-pressed="${(st.hg||"Tout")===g}" data-hg="${g}">${l}</button>`).join("")}<button class="chip nx" data-pillnext aria-label="Plus de genres">›</button></div><div id="ban"></div><div id="main"></div>`;
+ $("q").addEventListener("input",e=>{st.q=e.target.value;drawHome()});drawHome();
+}
+function drawHome(){
+ const q=st.q.trim().toLowerCase();banner(q);const A=st.ord.filter(vis),g=st.hg||"Tout";
+ if(q){$("main").innerHTML=grid(A.filter(i=>D[i].t.toLowerCase().includes(q)));return}
+ const P=A.filter(i=>g==="Tout"||D[i].g===g),N=A.filter(i=>D[i].n);
+ $("main").innerHTML=sech("Pour vous","liste-pv")+grid(P.slice(0,3))+sech("Nouveautés à découvrir","liste-nv")+grid(N.slice(0,3))+`<button class="vip" data-go="premium"><span class="crown">👑</span><span><b>Abonnez-vous Premium</b><small>Profitez de contenus exclusifs sans limites !</small></span><em>Passer à VIP ›</em></button>`;
+}
+let banT;
+function banner(q){
+ const el=$("ban");el.hidden=!!q;if(q||el.innerHTML)return;
+ const B=ALL().filter(i=>D[i].tr||D[i].n).slice(0,5);if(!B.length){el.hidden=true;return}
+ el.innerHTML=`<div class="bn" id="bn" aria-label="À l’affiche">${B.map(i=>{const d=D[i];return `<div class="bs" style="${bg(d)}"><span class="bk">${d.n?"Nouveauté":"Tendance"}</span><h3>${d.t}</h3><p>${d.s}</p><div class="btns"><button class="btn solid" data-go="lecteur-${i}-1">▶ Regarder</button><button class="btn" data-open="${i}" style="color:#fff;border-color:#fff">Détails</button></div></div>`}).join("")}</div><div class="dots" id="dots">${B.map((_,n)=>`<span${n?"":' class="on"'}></span>`).join("")}</div>`;
+ const bn=$("bn"),idx=()=>Math.round(bn.scrollLeft/bn.clientWidth);
+ bn.addEventListener("scroll",()=>{document.querySelectorAll("#dots span").forEach((s,n)=>s.classList.toggle("on",n===idx()))});
+ bn.addEventListener("pointerdown",()=>clearInterval(banT));
+ clearInterval(banT);
+ if(!matchMedia("(prefers-reduced-motion:reduce)").matches&&B.length>1)banT=setInterval(()=>{const b=$("bn");if(!b){clearInterval(banT);return}b.scrollTo({left:((idx()+1)%B.length)*b.clientWidth,behavior:"smooth"})},4500);
+}
+function crLoad(){try{return JSON.parse(localStorage.getItem("drc-creator")||"null")||{added:[],over:{}}}catch(e){return{added:[],over:{}}}}
+function crSave(c){try{localStorage.setItem("drc-creator",JSON.stringify(c))}catch(e){}}
+const price=p=>p.toFixed(2).replace(".",",")+" $";
+const clean=s=>String(s).replace(/[<>&"]/g,"").trim();
+function crPageOld(p){
+ const c=crLoad();
+ if(p[1]==="nouveau")return pg("Nouveau contenu",`<div class="cf"><label for="ct">Titre</label><input class="f" id="ct" maxlength="60"><label for="ck">Type</label><select class="f" id="ck"><option value="serie">Série</option><option value="film">Film</option></select><label for="cg">Genre</label><select class="f" id="cg">${GENRES.slice(1).map(g=>`<option>${g}</option>`).join("")}</select><label for="ce">Nombre d’épisodes (1 pour un film)</label><input class="f" id="ce" type="number" min="1" max="200" value="20"><label for="cs">Résumé</label><textarea id="cs" rows="3" maxlength="300"></textarea><label for="cp">Prix en $ (0 = gratuit)</label><input class="f" id="cp" type="number" min="0" step="0.5" value="0"><label for="cc">Couleur de l’affiche</label><input class="f" id="cc" type="color" value="#c2255c" style="height:48px;padding:4px"><div class="btns" style="margin-top:14px"><button class="btn solid" data-cadd>Publier</button></div><p class="meta" id="cmsg" aria-live="polite"></p></div>`);
+ pg("Espace créateur",`<div class="stats"><div><b>${D.length}</b>séries et films</div><div><b>${D.filter(d=>d.p>0).length}</b>premium</div><div><b>${c.added.length}</b>ajoutés par toi</div></div><div class="btns" style="margin:16px 0"><button class="btn solid" data-go="createur-nouveau">+ Ajouter une série ou un film</button></div><h2>Gérer et fixer les prix</h2><p class="meta" id="cmsg" aria-live="polite">Un prix supérieur à 0 rend la série premium.</p>${D.map((d,i)=>`<div class="crow"><div><b>${d.t}</b><br><span class="meta">${d.k==="film"?"Film":d.e+" épisodes"}, ${d.p>0?"Premium "+price(d.p):"Gratuit"}</span></div><div class="pp"><input class="f" id="pr-${i}" type="number" min="0" step="0.5" value="${d.p||0}" aria-label="Prix de ${d.t} en dollars"><button class="btn" data-sp="${i}">OK</button>${c.added.some(a=>a.t===d.t)?`<button class="btn" data-del="${i}">Supprimer</button>`:""}</div></div>`).join("")}<p class="meta" style="margin-top:20px">Ces réglages sont gardés sur cet appareil.</p>`);
+}
+function mic(){const R=window.SpeechRecognition||window.webkitSpeechRecognition,i=$("q");if(!R){i.placeholder="Recherche vocale indisponible ici";return}const r=new R();r.lang="fr-FR";r.onresult=e=>{i.value=e.results[0][0].transcript;st.q=i.value;drawHome()};r.onerror=()=>{i.placeholder="Micro non autorisé"};try{r.start()}catch(x){}}
+const pg=(t,h)=>{$("app").innerHTML=`<button class="back" data-back>← Retour</button><h1>${t}</h1>${h}`};
+let crOK=false;
+const sha=async s=>{try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("drc"+s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch(e){return"x"+s}};
+const CT=[["home","▦","Tableau de bord"],["series","🎞","Séries"],["episodes","☰","Épisodes"],["paiements","👛","Paiements"],["utilisateurs","👥","Utilisateurs"],["parametres","⚙","Paramètres"]];
+function crShell(sub,body){$("app").innerHTML=`<button class="back" data-back>← Retour</button><div><span class="pill">Espace privé • Démonstration</span></div><div class="ch"><div><h1 class="cb">DramaDRC</h1><p class="meta">Centre de contrôle administrateur</p></div><span class="shield" aria-hidden="true">🛡</span></div><div class="wc"><small>Bienvenue</small><b>${st.name==="Invité"?"Administrateur":esc(st.name)} 👋</b>Gérez votre plateforme de streaming.</div><h2 style="margin-top:0">Administration</h2><div class="at">${CT.map(([k,i,l])=>`<button data-go="createur${k==="home"?"":"-"+k}"${sub===k?' class="on"':""}><i>${i}</i>${l}</button>`).join("")}</div>${body}`}
+function crPage(p){
+ const c=crLoad(),sub=p[1]||"home";
+ if(!crOK)return pg("Espace privé",`<p>Cet espace est réservé au créateur.</p><label class="meta" for="cpin">${c.pin?"Entre ton code secret":"Crée ton code secret (4 à 6 chiffres)"}</label><input class="f" id="cpin" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><div class="btns" style="margin-top:12px"><button class="btn solid" data-pin>${c.pin?"Déverrouiller":"Créer le code"}</button></div><p class="meta" id="cmsg" aria-live="polite"></p><p class="meta">Ce code protège l’espace sur cet appareil. Une vraie protection demandera un compte et un serveur.</p>`);
+ if(sub==="nouveau")return crPageOld(p);
+ const card=(l,v)=>`<div><small>${l}</small><b>${v}</b></div>`;
+ const prem=D.filter(d=>d.p>0);
+ if(sub==="series")return crShell(sub,`<h2>Séries et films</h2><div class="btns"><button class="btn solid" data-go="createur-nouveau">+ Ajouter</button></div><p class="meta" id="cmsg" aria-live="polite">Un prix supérieur à 0 rend la série premium.</p>${D.map((d,i)=>`<div class="crow"><div><b>${d.t}</b><br><span class="meta">${d.k==="film"?"Film":d.e+" épisodes"}, ${d.p>0?"Premium "+price(d.p):"Gratuit"}</span></div><div class="pp"><input class="f" id="pr-${i}" type="number" min="0" step="0.5" value="${d.p||0}" aria-label="Prix de ${d.t} en dollars"><button class="btn" data-sp="${i}">OK</button>${c.added.some(a=>a.t===d.t)?`<button class="btn" data-del="${i}">Supprimer</button>`:""}</div></div>`).join("")}`);
+ if(sub==="episodes")return crShell(sub,`<h2>Épisodes</h2>${D.map((d,i)=>`<div class="crow"><div><b>${d.t}</b><br><span class="meta">${d.k==="film"?"Film":"Série"}</span></div>${d.k==="film"?`<span class="meta">1 épisode</span>`:`<div class="step"><button class="btn" data-ep="${i}|-1" aria-label="Retirer un épisode de ${d.t}">−</button><span>${d.e}</span><button class="btn" data-ep="${i}|1" aria-label="Ajouter un épisode à ${d.t}">+</button></div>`}</div>`).join("")}<p class="meta" style="margin-top:16px">L’envoi des vraies vidéos arrivera avec le serveur.</p>`);
+ if(sub==="paiements")return crShell(sub,`<h2>Paiements</h2><div class="sg">${card("Revenus réels","—")}${card("Séries premium",prem.length)}</div>${prem.map(d=>`<div class="crow"><b>${d.t}</b><span>${price(d.p)}</span></div>`).join("")}<p class="meta" style="margin-top:16px">Les vrais paiements (mobile money, carte) arriveront avec le serveur.</p>`);
+ if(sub==="utilisateurs")return crShell(sub,`<h2>Utilisateurs</h2><div class="sg">${card("Utilisateurs réels","—")}${card("Cet appareil",1)}${card("Avis publiés",nrev())}${card("Séries à regarder",cnt("want"))}</div><p class="meta" style="margin-top:16px">La liste des vrais utilisateurs demandera des comptes et un serveur.</p>`);
+ if(sub==="parametres")return crShell(sub,`<h2>Paramètres</h2><button class="qa" data-pinreset>Changer le code secret</button><button class="qa" data-lock>Verrouiller l’espace</button><button class="qa" data-wipe>Effacer tout l’espace créateur</button>`);
+ crShell("home",`<h2>Vue générale</h2><div class="sg">${card("Séries et films",D.length)}${card("Épisodes au total",D.reduce((a,d)=>a+d.e,0))}${card("Utilisateurs réels","—")}${card("Revenus réels","—")}</div><h2>Actions rapides</h2><button class="qa" data-go="createur-nouveau">+ Ajouter une série ou un film</button><button class="qa" data-go="createur-series">Fixer les prix premium</button><button class="qa" data-lock>Verrouiller l’espace</button>`);
+}
+const sw=(k,l)=>`<div class="srow"><span>${l}</span><button class="sw" role="switch" aria-checked="${getSet(k)}" aria-label="${l}" data-set="${k}"><u></u></button></div>`;
+const PAGES={
+ tendances:()=>pg("Tendances",grid(ALL().sort((a,b)=>D[b].v-D[a].v))),
+ cinema:()=>{const F=ALL().filter(i=>D[i].k==="film");pg("Films",F.length?grid(F):`<p class="empty">Aucun film pour l’instant. Ajoute-en depuis ton espace créateur.</p>`)},
+ plus:()=>pg("Plus",shortcuts()),
+ liste:p=>pg(p[1]==="nv"?"Nouveautés à découvrir":"Pour vous",grid(ALL().filter(i=>p[1]!=="nv"||D[i].n))),
+ premium:()=>pg("Premium",`<div class="vip" style="cursor:default;margin-top:0"><span class="crown">👑</span><span><b>DramaDRC VIP</b><small>Contenus exclusifs sans limites</small></span></div><ul class="perks"><li>Téléchargements illimités</li><li>Aucune publicité</li><li>Épisodes en avant-première</li></ul><div class="btns"><button class="btn solid" data-vip>Passer à VIP</button></div><p class="meta" id="vmsg" aria-live="polite"></p>`),
+ notifications:()=>{try{localStorage.setItem("drc-read","1")}catch(e){}pg("Notifications",[[2,"vient d’arriver. Lance l’épisode 1."],[1,"est en tendance cette semaine."],[0,"t’attend. Commence ta première série."]].map(([i,t])=>`<button class="ep-btn" style="margin-bottom:8px;width:100%;text-align:left" data-open="${i}"><span><b>${D[i].t}</b> ${t}</span></button>`).join(""))},
+ telechargements:()=>pg("Mes téléchargements",D.some((d,i)=>dlN(i))?grid(D.map((d,i)=>i).filter(dlN)):`<p class="empty">Rien de téléchargé. Ouvre une série et touche ⬇ pour regarder sans connexion.</p>`),
+ historique:()=>{const h=hist().filter(i=>D[i]);pg("Historique",h.length?grid(h)+`<div class="btns" style="margin-top:16px"><button class="btn" data-clr="hist">Effacer l’historique</button></div>`:`<p class="empty">Tu n’as encore rien regardé.</p>`)},
+ maliste:()=>{const W=D.map((d,i)=>i).filter(i=>st.mine[D[i].t]==="want");pg("Ma liste",W.length?grid(W):`<p class="empty">Ta liste est vide. Touche « À regarder » sur une série.</p>`)},
+ parametres:()=>pg("Paramètres",sw("notif","Notifications")+sw("wifi","Télécharger seulement en Wi-Fi")+`<div class="btns" style="margin-top:16px"><button class="btn" data-clr="dl">Supprimer mes téléchargements</button></div>`),
+ aide:()=>pg("Aide & Support",[["Comment télécharger un épisode ?","Ouvre une série et touche ⬇ à côté de l’épisode, ou « Tout télécharger »."],["Comment regarder sans connexion ?","Télécharge d’abord tes épisodes. Hors connexion, l’appli n’affiche que tes téléchargements."],["Comment passer en mode horizontal ?","Dans le lecteur, touche « Horizontal » en haut à droite."],["Besoin d’autre chose ?","Le contact direct avec l’équipe arrive bientôt."]].map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join(""))
+};
+function render(){
+ const p=location.hash.slice(1).split("-"),v=p[0]||"home";
+ const pl=v==="lecteur"||v==="pourvous";
+ if(!pl){$("pl").hidden=true;$("pl").innerHTML="";$("pl").className="";try{screen.orientation.unlock();if(document.fullscreenElement)document.exitFullscreen()}catch(e){}}
+ $("nav").hidden=v==="lecteur";
+ document.querySelectorAll(".nav button").forEach(b=>b.removeAttribute("aria-current"));
+ const cur=document.querySelector(`.nav [data-go="${v==="serie"?"home":v}"]`);if(cur)cur.setAttribute("aria-current","page");
+ if(v==="pourvous")return player(st.ord.map(i=>({i,ep:1})),0,"",true);
+ if(v==="lecteur"){const i=+p[1],e=+p[2]||1;if(!D[i])return go("home");addHist(i);return player(Array.from({length:D[i].e},(_,k)=>({i,ep:k+1})),e-1,"serie-"+i,false)}
+ window.scrollTo(0,0);
+ ({serie:()=>serie(+p[1]),films,invitation,profil,...PAGES}[v]||home)(p);
+}
+document.addEventListener("click",async e=>{
+ const b=e.target.closest("button");if(!b)return;const d=b.dataset;
+ if(d.go)return go(d.go);
+ if(d.open!==undefined)return go("serie-"+d.open);
+ if(d.tab){st.tab=d.tab;st.more=6;return drawHome()}
+ if(d.more!==undefined){st.more+=6;return drawHome()}
+ if(d.shuffle!==undefined){st.ord.sort(()=>Math.random()-.5);return drawHome()}
+ if(d.gf){st.gf=d.gf;return films()}
+ if(d.k){if(st.mine[d.t]===d.k)delete st.mine[d.t];else st.mine[d.t]=d.k;save();return render()}
+ if(d.star){draft=+d.star;document.querySelectorAll("#stars button").forEach(x=>x.classList.toggle("on",+x.dataset.star<=draft));return}
+ if(d.pub!==undefined){const s=D[+d.pub],x=$("rtxt").value.trim();
+  if(!draft)return $("rmsg").textContent="Choisis une note de 1 à 5 étoiles.";
+  if(!x)return $("rmsg").textContent="Écris quelques mots pour publier ton avis.";
+  (st.rev[s.t]=st.rev[s.t]||[]).push({n:st.name,r:draft,x});save();return serie(+d.pub)}
+ if(d.savename!==undefined){st.name=$("nm").value.trim()||"Invité";save();return profil()}
+ if(d.like){if(st.likes[d.like])delete st.likes[d.like];else st.likes[d.like]=1;save();b.classList.toggle("on",!!st.likes[d.like]);b.setAttribute("aria-pressed",!!st.likes[d.like]);return}
+ if(d.nextep!==undefined){const s=$("ps");s.scrollBy({top:s.clientHeight,behavior:"smooth"});return}
+ if(d.pin!==undefined){const v=$("cpin").value,m=$("cmsg");if(!/^\d{4,6}$/.test(v))return m.textContent="Le code doit contenir 4 à 6 chiffres.";const h=await sha(v),c=crLoad();if(!c.pin){c.pin=h;crSave(c);crOK=true;return render()}if(c.pin===h){crOK=true;return render()}return m.textContent="Code incorrect."}
+ if(d.lock!==undefined){crOK=false;return go("profil")}
+ if(d.ep){const[i,s]=d.ep.split("|").map(Number),x=D[i];x.e=Math.max(1,Math.min(200,x.e+s));const c=crLoad(),a=c.added.find(y=>y.t===x.t);if(a)a.e=x.e;else{c.eps=c.eps||{};c.eps[x.t]=x.e}crSave(c);return render()}
+ if(d.pinreset!==undefined){const c=crLoad();delete c.pin;crSave(c);crOK=false;return render()}
+ if(d.wipe!==undefined){if(b.dataset.arm!=="1"){b.dataset.arm="1";b.textContent="Confirmer ?";return}try{localStorage.removeItem("drc-creator")}catch(x){}location.reload();return}
+ if(d.cadd!==undefined){const m=$("cmsg"),t=clean($("ct").value),k=$("ck").value;
+  if(!t)return m.textContent="Donne un titre à ta série ou à ton film.";
+  if(D.some(x=>x.t.toLowerCase()===t.toLowerCase()))return m.textContent="Ce titre existe déjà.";
+  const o={t,e:k==="film"?1:Math.max(1,Math.min(200,+$("ce").value||1)),g:$("cg").value,s:clean($("cs").value)||"Pas encore de résumé.",c:[$("cc").value,"#0c0618"],v:0,n:1,tag:k==="film"?"Film":"Nouveau",p:Math.max(0,+$("cp").value||0),k};
+  const c=crLoad();c.added.push(o);crSave(c);D.push(o);st.ord.push(D.length-1);return go("createur-series")}
+ if(d.sp!==undefined){const i=+d.sp,v=Math.max(0,+$("pr-"+i).value||0),x=D[i];x.p=v;const c=crLoad(),a=c.added.find(y=>y.t===x.t);if(a)a.p=v;else c.over[x.t]=v;crSave(c);render();$("cmsg").textContent=x.t+" : "+(v>0?"premium à "+price(v):"gratuit")+".";return}
+ if(d.del!==undefined){if(b.dataset.arm!=="1"){b.dataset.arm="1";b.textContent="Confirmer ?";return}const t=D[+d.del].t,c=crLoad();c.added=c.added.filter(a=>a.t!==t);delete c.over[t];crSave(c);location.reload();return}
+ if(d.back!==undefined)return history.back();
+ if(d.hg){st.hg=d.hg;return home()}
+ if(d.mic!==undefined)return mic();
+ if(d.pillnext!==undefined){$("pills").scrollBy({left:200,behavior:"smooth"});return}
+ if(d.vip!==undefined){$("vmsg").textContent="Le paiement n’est pas encore actif dans ce prototype.";return}
+ if(d.set){const s=getSet();s[d.set]=!getSet(d.set);try{localStorage.setItem("drc-set",JSON.stringify(s))}catch(x){}return render()}
+ if(d.clr){if(d.clr==="dl"){st.dl={};save()}else{try{localStorage.removeItem("drc-hist")}catch(x){}}return render()}
+ if(d.rot!==undefined)return rot(b);
+ if(d.dl){const[i,ep]=d.dl.split("-").map(Number),k=D[i].t+"-"+ep;if(st.dl[k]){delete st.dl[k];save();return refresh()}if(!online())return;b.textContent="…";b.disabled=true;setTimeout(()=>{st.dl[k]=1;save();refresh()},1200);return}
+ if(d.dlall!==undefined){const i=+d.dlall,n=D[i].e;if(dlN(i)===n){for(let ep=1;ep<=n;ep++)delete st.dl[D[i].t+"-"+ep];save();return refresh()}if(!online())return;b.textContent="Téléchargement…";b.disabled=true;setTimeout(()=>{for(let ep=1;ep<=n;ep++)st.dl[D[i].t+"-"+ep]=1;save();refresh()},1500);return}
+ if(d.share!==undefined){const m=$("imsg");try{if(navigator.share)await navigator.share({title:"Drama Drc",text:"Regarde Drama Drc !",url:location.href.split("#")[0]});else{await navigator.clipboard.writeText(location.href.split("#")[0]);m.textContent="Lien copié. Colle-le dans un message à ton ami."}}catch(x){m.textContent="Impossible de partager. Copie le lien depuis la barre d’adresse."}}
+});
+window.addEventListener("hashchange",render);
+function net(){$("off").hidden=online()}
+window.addEventListener("online",()=>{net();render()});window.addEventListener("offline",()=>{net();render()});net();
+render();
+</script>
+</body>
+</html>
