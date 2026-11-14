@@ -354,5 +354,54 @@ function net(){$("off").hidden=online()}
 window.addEventListener("online",()=>{net();render()});window.addEventListener("offline",()=>{net();render()});net();
 render();
 </script>
+
+<!-- Connexion en temps réel à Firebase Cloud Firestore (dramardc-fb848) -->
+<script type="module">
+  import { initializeApp } from "https://gstatic.com";
+  import { getFirestore, collection, onSnapshot } from "https://gstatic.com";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAax6O3SNIke7Rf-QdKo2XDpv7bYg8Pz1c",
+    authDomain: "dramardc-fb848.firebaseapp.com",
+    projectId: "dramardc-fb848",
+    storageBucket: "dramardc-fb848.firebasestorage.app",
+    messagingSenderId: "124114533178",
+    appId: "1:124114533178:web:ac35c422829549de0a2e03",
+    measurementId: "G-M5FEELL3S5"
+  };
+
+  const fbApp = initializeApp(firebaseConfig);
+  const db = getFirestore(fbApp);
+
+  // Sauvegarde des dramas de base pour ne pas les perdre lors des mises à jour
+  const baseDramas = D.slice();
+
+  // Écoute en temps réel de la collection "dramas" publiée depuis l'espace créateur
+  onSnapshot(collection(db, "dramas"), (snapshot) => {
+    const cloudDramas = snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        t: data.t || "Sans titre",
+        e: Number(data.e) || 1,
+        g: data.g || "Drame",
+        c: ["#c2255c", "#1c0a2e"],
+        v: Number(data.v) || 0,
+        n: 1,
+        tag: data.k === "film" ? "Film" : "Nouveau",
+        p: Number(data.p) || 0,
+        k: data.k || "serie",
+        s: data.s || "Découvrez cette nouveauté sur DramaDRC.",
+        vUrl: data.v || ""
+      };
+    });
+
+    // Fusionne les dramas de base avec ceux ajoutés dans le cloud
+    D.length = 0;
+    D.push(...cloudDramas, ...baseDramas);
+    st.ord = D.map((_, i) => i);
+    render();
+    console.log("Catalogue DramaDRC synchronisé :", cloudDramas.length, "éléments cloud.");
+  });
+</script>
 </body>
 </html>
