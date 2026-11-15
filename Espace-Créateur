@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DramaDRC Créateur — Connecté à Firebase</title>
+<meta name="description" content="Espace créateur DramaDRC relié à Cloud Firestore.">
+<meta name="theme-color" content="#100610">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://w3.org' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎬%3C/text%3E%3C/svg%3E">
+
+<style>
+:root{--bg:#f7f1f6;--card:#fff;--ink:#24102a;--mut:#6d5c78;--line:#e3d5e6;--acc:#c2185b;--on:#fff;--ok:#0d7a4f;--okbg:#d9f3e6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#100610;--card:#1d1226;--ink:#fff;--mut:#a99ba8;--line:#3a2a4a;--acc:#ff4d8d;--ok:#3ddc97;--okbg:#0e3a2a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#100610;--card:#1d1226;--ink:#fff;--mut:#a99ba8;--line:#3a2a4a;--acc:#ff4d8d;--ok:#3ddc97;--okbg:#0e3a2a;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:640px;margin:0 auto;padding:18px 16px 48px}
+h1{margin:6px 0 2px;font-size:2.4rem;line-height:1;color:var(--acc)}
+h2{font-size:1.35rem;margin:24px 0 10px}
+.mut{color:var(--mut);font-size:14px}
+.pill{display:inline-block;background:var(--okbg);color:var(--ok);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:600}
+.head{display:flex;justify-content:space-between;align-items:center}
+.shield{display:grid;place-items:center;width:60px;height:60px;border-radius:50%;background:var(--card);border:1px solid var(--line);font-size:26px}
+.wc{background:var(--card);border-radius:18px;padding:16px;margin:14px 0}
+.wc b{display:block;font-size:1.4rem;margin:2px 0}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tabs button{display:grid;justify-items:center;gap:4px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;color:var(--ink);padding:14px 4px;font:600 14px system-ui,sans-serif;cursor:pointer}
+.tabs button[aria-current=page]{background:var(--acc);border-color:var(--acc);color:var(--on)}
+.tabs i{font-style:normal;font-size:22px}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sg div{background:var(--card);border-radius:16px;padding:14px;color:var(--mut);font-size:14px}
+.sg b{display:block;font-size:2.2rem;color:var(--ink);margin:2px 0}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.btn{border:1.5px solid var(--acc);background:transparent;color:var(--acc);padding:8px 14px;border-radius:10px;font:600 14px system-ui,sans-serif;cursor:pointer}
+.btn.s{background:var(--acc);color:var(--on)}
+.qa{display:block;width:100%;background:var(--ink);color:var(--bg);border:0;border-radius:999px;padding:14px;margin-top:10px;font:600 16px system-ui,sans-serif;cursor:pointer}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.pp{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+input,select,textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit}
+.pp input{width:84px;padding:8px}
+label{display:block;margin:12px 0 4px;color:var(--mut);font-size:14px}
+.msg{min-height:1.4em;color:var(--ok);font-size:14px;font-weight:600}
+</style>
+</head>
+<body>
+<p class="mut" style="margin:0;padding:8px 16px;text-align:center">Connecté en temps réel à Firebase (dramardc-fb848)</p>
+<main id="app"></main>
+
+<script type="module">
+import { initializeApp } from "https://gstatic.com";
+import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://gstatic.com";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAax6O3SNIke7Rf-QdKo2XDpv7bYg8Pz1c",
+  authDomain: "://firebaseapp.com",
+  projectId: "dramardc-fb848",
+  storageBucket: "dramardc-fb848.firebasestorage.app",
+  messagingSenderId: "124114533178",
+  appId: "1:124114533178:web:ac35c422829549de0a2e03",
+  measurementId: "G-M5FEELL3S5"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+const dramasCol = collection(db, "dramas");
+
+const $ = s => document.querySelector(s), app = $("#app");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const slug = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const price = p => Number(p).toFixed(2).replace(".",",") + " $";
+const TABS = [["home","▦","Tableau de bord"],["series","🎞","Séries"],["eps","☰","Épisodes"],["pay","👛","Paiements"],["users","👥","Utilisateurs"],["set","⚙","Paramètres"]];
+const GEN = ["Romance","Action","Aventure","Vengeance","Fantasy","Drame","Comédie"];
+
+let items = [], tab = "home", msg = "", state = "load";
+const card = (l,v) => `<div>${l}<b>${v}</b></div>`;
+
+function body(){
+ const eps = items.reduce((a,d) => a + (+d.e || 0), 0), prem = items.filter(d => d.p > 0);
+ if(tab === "series") return `<h2>Séries et films</h2>
+  <label for="ft">Titre</label><input id="ft" maxlength="60" placeholder="Ex: Les Secrets de Kinshasa">
+  <label for="fk">Type</label><select id="fk"><option value="serie">Série</option><option value="film">Film</option></select>
+  <label for="fg">Genre</label><select id="fg">${GEN.map(g=>`<option>${g}</option>`).join("")}</select>
+  <label for="fe">Nombre d’épisodes (1 pour un film)</label><input id="fe" type="number" min="1" max="200" value="20">
+  <label for="fs">Résumé</label><textarea id="fs" rows="3" maxlength="300" placeholder="Synopsis du drama..."></textarea>
+  <label for="fv">Lien vidéo MP4 / Streaming (optionnel)</label><input id="fv" type="url" placeholder="https://...">
+  <label for="fp">Prix en $ (0 = gratuit)</label><input id="fp" type="number" min="0" step="0.5" value="0">
+  <button class="qa" data-add>Publier sur Firebase</button>
+  <h2>Catalogue en ligne (${items.length})</h2>
+  ${items.length === 0 ? `<p class="mut">Aucune série publiée pour le moment.</p>` : ""}
+  ${items.map(d => `<div class="row"><div><b>${esc(d.t)}</b><br><span class="mut">${esc(d.g || "Drame")} • ${d.k==="film"?"Film":d.e+" épisodes"}, ${d.p>0?"Premium "+price(d.p):"Gratuit"}</span></div><div class="pp"><input id="p-${d.id}" type="number" min="0" step="0.5" value="${d.p||0}" aria-label="Prix de ${esc(d.t)}"><button class="btn" data-sp="${d.id}">OK</button><button class="btn" data-del="${d.id}">Supprimer</button></div></div>`).join("")}`;
+ 
+ if(tab === "eps") return `<h2>Épisodes</h2>${items.map(d => `<div class="row"><div><b>${esc(d.t)}</b></div>${d.k==="film"?`<span class="mut">1 épisode</span>`:`<div class="pp"><button class="btn" data-ep="${d.id}|-1" aria-label="Retirer un épisode">−</button><b>${d.e}</b><button class="btn" data-ep="${d.id}|1" aria-label="Ajouter un épisode">+</button></div>`}</div>`).join("")}`;
+ 
+ if(tab === "pay") return `<h2>Paiements</h2><div class="sg">${card("Revenus réels","—")}${card("Séries premium",prem.length)}</div>${prem.map(d => `<div class="row"><b>${esc(d.t)}</b><span>${price(d.p)}</span></div>`).join("")}<p class="mut">Les vrais paiements (mobile money, carte) arriveront avec l'intégration passerelle.</p>`;
+ 
+ if(tab === "users") return `<h2>Utilisateurs</h2><div class="sg">${card("Utilisateurs réels","—")}${card("Créateur","1")}</div><p class="mut">La liste des vrais utilisateurs demandera l'activation de Firebase Authentication.</p>`;
+ 
+ if(tab === "set") return `<h2>Paramètres</h2><p>Cet espace est relié directement à la base de données <b>Cloud Firestore (dramardc-fb848)</b>.</p><p class="mut">Toute série ajoutée ou modifiée ici est instantanément envoyée dans le cloud pour l'application principale.</p>`;
+ 
+ return `<h2>Vue générale</h2><div class="sg">${card("Séries et films",items.length)}${card("Épisodes au total",eps)}${card("Utilisateurs réels","—")}${card("Revenus réels","—")}</div><h2>Actions rapides</h2><button class="qa" data-tab="series">Ajouter une série ou un film</button><button class="qa" data-tab="series">Fixer les prix premium</button>`;
+}
+
+function render(){
+ if(state === "load") return app.innerHTML = `<p class="mut">Connexion à Firebase en cours…</p>`;
+ app.innerHTML = `<span class="pill">Connecté à Cloud Firestore</span><div class="head"><div><h1>DramaDRC</h1><p class="mut" style="margin:0">Centre de contrôle administrateur</p></div><span class="shield" aria-hidden="true">🛡</span></div><div class="wc"><span class="mut">Bienvenue</span><b>Administrateur 👋</b>Gérez votre plateforme de streaming en direct.</div><div class="tabs">${TABS.map(([k,i,l])=>`<button data-tab="${k}"${tab===k?' aria-current="page"':""}><i>${i}</i>${l}</button>`).join("")}</div><p class="msg" role="status">${esc(msg)}</p>${body()}`;
+}
+
+async function run(f, ok){
+ try {
+  await f();
+  msg = ok;
+ } catch(e) {
+  console.error(e);
+  msg = "Erreur Firebase : " + e.message;
+ }
+ render();
+}
+
+app.addEventListener("click", ev => {
+ const b = ev.target.closest("button");
+ if(!b) return;
+ msg = "";
+ if(b.dataset.tab){ tab = b.dataset.tab; render(); return; }
+ 
+ if(b.hasAttribute("data-add")){
+  const t = $("#ft").value.trim();
+  if(!t){ msg = "Entre un titre d'abord."; render(); return; }
+  const k = $("#fk").value;
+  const g = $("#fg").value;
+  const e = k === "film" ? 1 : Math.max(1, +$("#fe").value || 1);
+  const s = $("#fs").value.trim();
+  const v = $("#fv").value.trim();
+  const p = Math.max(0, +$("#fp").value || 0);
+  const id = slug(t) + "-" + Date.now().toString().slice(-4);
